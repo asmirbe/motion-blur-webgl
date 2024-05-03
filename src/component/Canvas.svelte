@@ -11,6 +11,7 @@
 		import { onMount } from "svelte";
 
 		export let strength;
+		export let width;
 		export let angle;
 		export let radius;
 
@@ -142,4 +143,4 @@
 			};
 		});
 	</script>
-	<canvas bind:this={canvas} width="355" height="355" style="background-color: black;"></canvas>
+	<canvas bind:this={canvas} width={width} height={width} style="background-color: black;"></canvas>

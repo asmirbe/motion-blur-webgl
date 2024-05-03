@@ -81,9 +81,9 @@
 	}
 
 	function handleChange(newAngle) {
-  const angleInRadians = toRad(newAngle);
-  onChange(angleInRadians);
-}
+		const angleInRadians = toRad(newAngle);
+		onChange(angleInRadians);
+	}
 
 	function calculateLinePoints(newAngle) {
 		const x1 = r + trackWidth / 2;
@@ -97,7 +97,7 @@
 
 <div id="circular-slider" style="width: {r * 2}px; height: {r * 2}px; position: relative; {isDragging ? `--arc-color-focus: ${arcColorFocus}` : null};" bind:this={ref}>
 	<Track width={trackWidth} color={trackColor} />
-	<Arc {r} {angle} {initialAngle} width={trackWidth} color={arcColor} />
+	<Arc {r} {angle} {initialAngle} width={trackWidth} />
 	<Line points={calculateLinePoints(angle)} />
 	<Thumb diameter={thumbWidth} color={thumbColor} position={calculateThumbPosition(angle)} handleSelect={thumbSelect} />
 </div>

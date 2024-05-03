@@ -1,31 +1,18 @@
 <script>
 	import Slider from "./component/Slider.svelte";
 	import Canvas, { canvasState } from "./component/Canvas.svelte";
-	import { onMount } from "svelte";
-	let strengthProgress = 0;
+	import InputRange from "./component/InputRange.svelte";
 
-	export let options = {
-		min: 0,
-		max: 1,
-		step: 0.01,
-	};
-
-	function generateBackground(value, min, max) {
-		if (value === min) {
-			return;
-		}
-		let percentage = ((value - min) / (max - min)) * 100;
-		return `background: linear-gradient(to right, #0b5ee3 ${percentage}%, #222222 ${percentage}%)`;
-	}
-
-	$: strengthProgressFormatted = strengthProgress === options.max ? (1.0).toFixed(2) : (Math.floor(strengthProgress * 10) / 100).toFixed(2);
+	$: strengthProgressFormatted = (Math.round(($canvasState.strength / 40) * 100) / 100).toFixed(1);
+	// $: strengthProgressFormatted = (Math.round(($canvasState.strength / 40) * 10)).toFixed(1);
 
 	function updateStrength(value) {
 		canvasState.update((state) => ({
 			...state,
-			strength: (value * 40).toFixed(2),
+			strength: value.toFixed(2),
 		}));
 	}
+
 	function updateAngle(value) {
 		canvasState.update((state) => ({
 			...state,
@@ -44,7 +31,7 @@
 	<div class="rotate-container">
 		<div class="content">
 			<div class="canvas">
-				<Canvas strength={$canvasState.strength} angle={$canvasState.angle} radius={$canvasState.radius} />
+				<Canvas width="355" strength={$canvasState.strength} angle={$canvasState.angle} radius={$canvasState.radius} />
 			</div>
 			<div class="control-wrapper">
 				<div class="control">
@@ -52,11 +39,11 @@
 						<div class="title">
 							Motion blur <span>{strengthProgressFormatted}</span>
 						</div>
-						<input type="range" bind:value={strengthProgress} min={options.min} max={options.max} step={options.step} style={generateBackground(strengthProgress, options.min, options.max)} on:input={() => updateStrength(strengthProgress)} />
+						<InputRange max={40} value={$canvasState.strength} onChange={updateStrength}/>
 					</div>
 				</div>
 				<div class="control">
-					<Slider r={22} trackWidth={2} thumbWidth={20} value={$canvasState.angle} initialAngle={90} removeAngleLimit={true} onChange={updateAngle} arcColor="#0b5ee3" max={360} trackColor="#222222" />
+					<Slider r={25} trackWidth={2} thumbWidth={20} value={$canvasState.angle} initialAngle={90} removeAngleLimit={true} onChange={updateAngle} arcColor="#0b5ee3" max={360} trackColor="#222222" />
 				</div>
 			</div>
 		</div>
@@ -121,12 +108,13 @@
 	}
 
 	.content {
-		height: 600px;
+		height: 500px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: flex-end;
 	}
+
 	.canvas {
 		display: flex;
 		height: 100%;
@@ -134,6 +122,7 @@
 		align-items: center;
 		justify-content: center;
 	}
+
 	.rotate-container {
 		position: relative;
 		display: flex;
@@ -142,28 +131,6 @@
 		background-size: 100% 100%;
 		background-position: center;
 		background-repeat: no-repeat;
-	}
-
-	input[type="range"] {
-		width: 180px;
-		-webkit-appearance: none;
-		height: 2px;
-		border-radius: 5px;
-		background: #222222;
-		outline: none;
-		padding: 0;
-		margin: 0;
-	}
-
-	input[type="range"]::-webkit-slider-thumb {
-		-webkit-appearance: none;
-		width: 20px;
-		height: 20px;
-		border-radius: 50%;
-		background: #fff;
-		transition: all 0.15s ease-in-out;
-		box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-		cursor: pointer;
 	}
 
 	* {

@@ -5,7 +5,6 @@
   export let angle;
   export let initialAngle;
   export let width;
-  export let color;
 
   const getPointCoordString = (r, angle) => {
     const x = Math.cos(toRad(angle)) * r * 100;
